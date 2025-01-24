@@ -1,0 +1,219 @@
+{
+  "scopeName": "source.pz-script",
+  "patterns": [
+    {
+      "name": "entity.name.recipe.pz",
+      "match": "(\\bcraftRecipe\\b)\\s+(\\w+)",
+      "captures": {
+        "1": {
+          "name": "keyword.control"
+        },
+        "2": {
+          "name": "entity.name.class"
+        }
+      }
+    },
+    {
+      "name": "entity.name.item.pz",
+      "match": "(\\bitem\\b)\\s+(\\w+)",
+      "captures": {
+        "1": {
+          "name": "keyword.control"
+        },
+        "2": {
+          "name": "entity.name.class"
+        }
+      }
+    },
+    {
+      "name": "keyword.module.pz",
+      "match": "(\\bmodule\\b)\\s+(\\w+)",
+      "captures": {
+        "1": {
+          "name": "keyword.control"
+        },
+        "2": {
+          "name": "entity.name.namespace"
+        }
+      }
+    },
+    {
+      "name": "support.type.property-name",
+      "match": "\\bBase\\.[\\w.]+\\b"
+    },
+    {
+      "name": "entity.name.type",
+      "match": "\\b(fixing|inputs|outputs|component|itemMapper)\\b"
+    },
+    {
+      "name": "keyword.weapon.properties.pz",
+      "match": "\\b(AimingPerkCritModifier|AimingPerkHitChanceModifier|AimingPerkMinAngleModifier|AimingTime|AmmoBox|FireMode|HitChance|MaxAmmo|ProjectileCount|ProjectileSpread|RecoilDelay|WeaponReloadType|MaxRange|MinRange|RackSound|ShellFallSound|InsertAmmoSound|EjectAmmoSound|IsAimedFirearm|JamGunChance|MagazineType|RangeFalloff|AngleFalloff)\\b"
+    },
+    {
+      "name": "keyword.item.core.pz",
+      "match": "\\b(DisplayName|DisplayCategory|Type|Weight|Icon|WorldStaticModel|StaticModel|Tags|ConditionMax|UseWhileEquipped|Tooltip)\\b"
+    },
+    {
+      "name": "keyword.item.stats.pz",
+      "match": "\\b(MetalValue|MaxDamage|MinDamage|EnduranceMod|TreeDamage|DoorDamage|CriticalChance|CritDmgMultiplier|MaxHitCount|KnockdownMod|PushBackMod)\\b"
+    },
+    {
+      "name": "keyword.item.sound.pz",
+      "match": "\\b(BreakSound|HitSound|SwingSound|EquipSound|UnequipSound|SoundRadius|SoundVolume|SoundGain)\\b"
+    },
+    {
+      "name": "keyword.item.animation.pz",
+      "match": "\\b(IdleAnim|RunAnim|SwingAnim|SwingTime|MinimumSwingTime|SwingAmountBeforeImpact)\\b"
+    },
+    {
+      "name": "keyword.item.attachment.pz",
+      "match": "\\b(AttachmentType|WeaponSprite|WeaponSpritesByIndex|ModelWeaponPart|PartType|MountOn)\\b"
+    },
+    {
+      "name": "keyword.item.food.pz",
+      "match": "\\b(HungerChange|ThirstChange|DaysFresh|DaysTotallyRotten|Calories|FoodType|CantEat|IsCookable|MinutesToCook|MinutesToBurn|DangerousUncooked|Spice|EvolvedRecipe)\\b"
+    },
+    {
+      "name": "keyword.item.electric.pz",
+      "match": "\\b(RemoteController|RemoteRange|WorldObjectSprite|IsPortable|UsesBattery|LightDistance|LightStrength|TorchCone)\\b"
+    },
+    {
+      "name": "keyword.consumable.properties.pz",
+      "match": "\\b(Calories|Carbohydrates|Lipids|Proteins|DaysFresh|DaysTotallyRotten|BoredomChange|FatigueChange|StressChange|HungerChange|ThirstChange|UnhappyChange|Spice|EvolvedRecipe|IsCookable|BadInMicrowave|DangerousUncooked|CantEat|EatType|CantBeFrozen|FoodType|BandagePower|CanBandage|Medical|ReduceInfectionPower|Alcoholic)\\b"
+    },
+    {
+      "name": "keyword.vehicle.properties.pz",
+      "match": "\\b(MechanicsItem)\\b"
+    },
+    {
+      "name": "keyword.weapon.combat.pz",
+      "match": "\\b(Sharpness|BaseSpeed|Categories|DoorHitSound|HitAngleMod|HitFloorSound|WeaponLength|CantAttackWithLowestEndurance|DamageCategory|MaxDamage|MinDamage|CriticalChance|CritDmgMultiplier|KnockdownMod|MaxHitCount|PushBackMod|MinRange|MaxRange|MaxSightRange|MinSightRange|TreeDamage|DoorDamage|EnduranceMod|StopPower|AlwaysKnockdown|DamageMakeHole|RequiresEquippedBothHands|TwoHandWeapon)\\b"
+    },
+    {
+      "name": "keyword.firearm.properties.pz",
+      "match": "\\b(GunType|AimingMod|IsAimedHandWeapon|ProjectileWeightCenter|RackAfterShoot|SplatBloodOnNoDeath|SplatNumber|SplatSize|SubCategory|ToHitModifier|UseEndurance|BringToBearSound|ClickSound|DropSound|EjectAmmoStartSound|EjectAmmoStopSound|ImpactSound|InsertAmmoStartSound|InsertAmmoStopSound|KnockBackOnNoDeath|MinAngle|NPCSoundBoost|Ranged|ShareDamage|AimingPerkRangeModifier|TorchDot|ProjectileSpreadModifier|MaxRangeModifier|AimingTimeModifier|HitChanceModifier|RecoilDelayModifier|AimingTimeModifier|ReloadTimeModifier|LowLightBonus|AmmoType|MagazineType|ClipSize|MaxAmmo|ProjectileCount|ProjectileSpread|RangeFalloff|AngleFalloff|RecoilDelay|ReloadTime|AimingTime|JamGunChance|PiercingBullets|WeaponReloadType|HaveChamber|InsertAllBulletsReload|ManuallyRemoveSpentRounds|FireMode|FireModePossibilities)\\b"
+    },
+    {
+      "name": "keyword.item.technical.pz",
+      "match": "\\b(ConditionMax|ConditionLowerChanceOneIn|ConditionLowerStandard|UseDelta|UseWhileEquipped|ReplaceOnUse|ReplaceOnDeplete|ReplaceOnRotten|ReplaceOnCooked|DisappearOnUse|KeepOnDeplete|CanStack|Count|WeightEmpty|WeightModifier)\\b"
+    },
+    {
+      "name": "keyword.item.visual.pz",
+      "match": "\\b(Icon|WorldStaticModel|StaticModel|WorldObjectSprite|WeaponSprite|WeaponSpritesByIndex|IconsForTexture|IconColorMask|IconFluidMask|ScaleWorldIcon|primaryAnimMask|secondaryAnimMask)\\b"
+    },
+    {
+      "name": "keyword.item.media.pz",
+      "match": "\\b(AcceptMediaType|IsTelevision|MaxChannel|MinChannel|TransmitRange|MicRange|NoTransmit|ReadType|MediaCategory)\\b"
+    },
+    {
+      "name": "keyword.item.special.pz",
+      "match": "\\b(RemoteController|RemoteRange|LightDistance|LightStrength|TorchCone|ActivatedItem|FishingLure|MetaRecipe|TeachedRecipes|AnimalFeedType|IsDung)\\b"
+    },
+    {
+      "name": "keyword.fluid.container.pz",
+      "match": "\\b(ContainerName|RainFactor|capacity|Fluids|fluid|PickRandomFluid|CustomDrinkSound|FillFromDispenserSound|FillFromTapSound|FillFromLakeSound|FillFromToiletSound|PourType)\\b"
+    },
+    {
+      "name": "keyword.item.behavior.pz",
+      "match": "\\b(OnBreak|OnCreate|OnEat|OnTest|ToolTip|TeachedRecipes|ReadType|EvolvedRecipe|EvolvedRecipeName|AutoLearnAny|NeedToBeLearn|SkillRequired)\\b"
+    },
+    {
+      "name": "keyword.item.condition.pz",
+      "match": "\\b(ConditionMax|ConditionLowerChanceOneIn|HeadCondition|HeadConditionLowerChanceMultiplier|MultipleHitConditionAffected|NoMaintenanceXp)\\b"
+    },
+    {
+      "name": "keyword.item.flags.pz",
+      "match": "\\b(HasMetal|HasToolHead|IgnoreZombieDensity|ShowCondition|IsMemento|IsFireFuel|CutPlant|ChopTree|KillAnimal|Sharpenable|Bucket|Cookable|LugWrench|PistolMagazine|RifleMagazine)\\b"
+    },
+    {
+      "name": "keyword.item.repair.pz",
+      "match": "\\b(RepairWithGlue|RepairWithTape|RepairWithEpoxy|ItemAfterCleaning)\\b"
+    },
+    {
+      "name": "keyword.item.status.pz",
+      "match": "\\b(ticksPerEquipUse|CustomContextMenu|AlcoholPower|BoredomChange|FatigueChange|StressChange|UnhappyChange|HungerChange|ThirstChange|BandagePower|ReduceInfectionPower)\\b"
+    },
+    {
+      "name": "keyword.item.equipment.pz",
+      "match": "\\b(RequiresEquippedBothHands|TwoHandWeapon|CanBeEquipped|EquippedNoSprint|ProtectFromRainWhenEquipped|UseWhileEquipped|BloodLocation|ReplaceInPrimaryHand|ReplaceInSecondHand)\\b"
+    },
+    {
+      "name": "keyword.animal.properties.pz",
+      "match": "\\b(AnimalFeedType|isCompostable|IsDung|AnimalCorpse|AnimalHead|AnimalBone|AnimalBrain|AnimalSkull|BirdSkull)\\b"
+    },
+    {
+      "name": "keyword.tool.properties.pz",
+      "match": "\\b(Saw|MetalSaw|LugWrench|PlasterTrowel|MortarPestle|MixingUtensil|BottleOpener|CanOpener|SmeltableIronSmall|SmeltableIronMedium|CrudeTongs|BreakOnSmithing)\\b"
+    },
+    {
+      "name": "keyword.inventory.properties.pz",
+      "match": "\\b(FitsWallet|FitsKeyRing|isSeed|AlwaysWelcomeGift|DontInheritCondition|cantBeConsolided|ConsolidateOption)\\b"
+    },
+    {
+      "name": "keyword.container.fluid.pz",
+      "match": "\\b(FluidContainer|ContainerName|Fluids|fluid|PickRandomFluid|PourType|EatType|FillFromDispenserSound|FillFromLakeSound|FillFromTapSound|FillFromToiletSound)\\b"
+    },
+    {
+      "name": "keyword.crafting.properties.pz",
+      "match": "\\b(CoffeeMaker|Cookable|CookableMicrowave|CleanStains|TeachedRecipes|EvolvedRecipe|EvolvedRecipeName|ReplaceOnCooked|ReplaceOnRotten|ReplaceOnDeplete)\\b"
+    },
+    {
+      "name": "keyword.condition.properties.pz",
+      "match": "\\b(ConditionMax|ConditionLowerChanceOneIn|ConditionLowerStandard|ShowCondition|NoMaintenanceXp|RepairWithGlue|RepairWithTape|RepairWithEpoxy|ItemAfterCleaning)\\b"
+    },
+    {
+      "name": "keyword.model.properties.pz",
+      "match": "\\b(StaticModelsByIndex|WorldStaticModel|WorldStaticModelsByIndex|StaticModel|WorldObjectSprite|WeaponSprite|WeaponSpritesByIndex|ScaleWorldIcon|primaryAnimMask|secondaryAnimMask)\\b"
+    },
+    {
+      "name": "keyword.tag.properties.pz",
+      "match": "\\b(IsFireFuel|IsFireTinder|FireFuelRatio|HasMetal|IsMemento|Sharpenable|Cookable|PistolMagazine|RifleMagazine|ChopTree|CutPlant|KillAnimal)\\b"
+    },
+    {
+      "name": "keyword.food.details.pz",
+      "match": "\\b(BadCold|GoodHot|AlreadyCooked|HideCooked|HideUncooked|RemoveNegativeEffectOnCooked|CustomEatSound|EatTime|BadInMicrowave|FitsToaster|Toastable|DriedFood|IsFireFuel|Packaged|CantBeFrozen)\\b"
+    },
+    {
+      "name": "keyword.fishing.properties.pz",
+      "match": "\\b(FishingLure|FishingLine|FishingNet|FishingHook|FishingTackle|SurvivalGear|ConsolidateOption)\\b"
+    },
+    {
+      "name": "keyword.evolution.recipe.pz",
+      "match": "\\b(EvolvedRecipe|EvolvedRecipeName|ReplaceOnCooked|ReplaceOnRotten|ReplaceOnDeplete|ReplaceOnUse|TeachedRecipes)\\b"
+    },
+    {
+      "name": "keyword.sound.properties.pz",
+      "match": "\\b(BaseVolumeRange|CustomEatSound|TwoWay|IsHighTier|CustomDrinkSound|CookingSound|PlaceMultipleSound|PlaceOneSound|SoundMap|AlarmSound|FillFromDispenserSound|FillFromTapSound|FillFromLakeSound|FillFromToiletSound)\\b"
+    },
+    {
+      "name": "keyword.animal.details.pz",
+      "match": "\\b(AnimalFeedType|AnimalHead|AnimalBone|AnimalBrain|AnimalSkull|BirdSkull|BoneFragment|Feather|HerbalistType|DontInheritCondition)\\b"
+    },
+    {
+      "name": "keyword.crafting.recipe.pz",
+      "match": "\\b(timedAction|Time|category|Tags|inputs|outputs|itemMapper|SkillRequired|needTobeLearn|needToBeLearn|NeedToBeLearn|AutoLearnAny|xpAward|OnCreate|OnTest|ToolTip|MetaRecipe|time|tags|AllowBatchCraft)\\b"
+    },
+    {
+      "name": "comment.block.pz",
+      "begin": "/\\*",
+      "end": "\\*/"
+    },
+    {
+      "name": "comment.line.double-slash.pz",
+      "match": "//.*$"
+    },
+    {
+      "name": "constant.language.pz",
+      "match": "\\b(TRUE|FALSE)\\b"
+    },
+    {
+      "name": "string.quoted.double.pz",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "constant.numeric.pz",
+      "match": "\\b\\d+(\\.\\d+)?\\b"
+    }
+  ]
+}

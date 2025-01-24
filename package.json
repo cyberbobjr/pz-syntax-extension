@@ -1,0 +1,92 @@
+{
+  "name": "pz-syntax-extension",
+  "displayName": "Project Zomboid Script Support",
+  "description": "A Visual Studio Code extension for Project Zomboid file format (items and recipes) syntax highlighting and formatting.",
+  "version": "0.2.0",
+  "publisher": "cyberbobjr",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": [],
+  "editor.semanticHighlighting.enabled": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cyberbobjr/pz-syntax-extension"
+  },
+  "icon": "images/pz-script.png",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "PZ Syntax Extension",
+      "properties": {
+        "pzSyntaxExtension.searchDirectories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid/media/scripts/"
+          ],
+          "description": "Directories to search for item definition files."
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "pz-scripting",
+        "aliases": [
+          "Project Zomboid Script",
+          "pz-script"
+        ],
+        "extensions": [
+          ".txt"
+        ],
+        "firstLine": "^\\s*module\\s+\\w+",
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pz-scripting",
+        "scopeName": "source.pz-script",
+        "path": "./syntaxes/pz-scripting.tmLanguage.json"
+      }
+    ],
+    "semanticTokenScopes": [
+      {
+        "scopes": {
+          "entity.name.recipe.pz": [
+            "entity.name.recipe"
+          ],
+          "entity.name.item.pz": [
+            "entity.name.item"
+          ],
+          "entity.name.recipe.name.pz": [
+            "entity.name.recipe.name"
+          ],
+          "entity.name.item.name.pz": [
+            "entity.name.item.name"
+          ],
+          "keyword.control.pz": [
+            "keyword.control"
+          ]
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./tsconfig.json",
+    "watch": "tsc -watch -p ./tsconfig.json",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.9",
+    "typescript": "^4.0.0",
+    "vsce": "^2.15.0",
+    "vscode": "^1.1.36"
+  }
+}
