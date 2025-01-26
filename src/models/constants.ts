@@ -443,6 +443,12 @@ export const VALID_KEYWORDS = {
     "secondaryAnimMask",
     "AlcoholPower",
     "-fluid",
+    // Véhicule
+    "VehicleType",
+    "ChanceToSpawnDamaged",
+    "MaxCapacity",
+    "EngineLoudness",
+    "ConditionLowerOffroad"
   ],
   component: [
     "ContainerName",
