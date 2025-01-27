@@ -2,6 +2,8 @@
 
 This VS Code extension provides comprehensive support for Project Zomboid's scripting files, including syntax highlighting, auto-formatting, and diagnostics for items, recipes, and other script blocks.
 
+The supported version of Project Zomboid is b42.
+
 ## Features
 
 - Syntax highlighting for Project Zomboid's scripting language:
@@ -23,6 +25,11 @@ This VS Code extension provides comprehensive support for Project Zomboid's scri
 - Diagnostics:
   - Identifies unrecognized keywords within blocks
   - Provides warnings for potential issues in the script
+
+## Changelog
+- v0.2.0 - Initial release
+- v0.2.1 - Add missing properties for vehicle
+- v0.2.2 - Add missing properties for clothing
 
 ## GitHub Repository
 

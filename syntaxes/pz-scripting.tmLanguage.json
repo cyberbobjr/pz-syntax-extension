@@ -51,7 +51,7 @@
     },
     {
       "name": "keyword.item.core.pz",
-      "match": "\\b(DisplayName|DisplayCategory|Type|Weight|Icon|WorldStaticModel|StaticModel|Tags|ConditionMax|UseWhileEquipped|Tooltip)\\b"
+      "match": "\\b(DisplayName|DisplayCategory|Type|Weight|Icon|WorldStaticModel|StaticModel|Tags|ConditionMax|UseWhileEquipped|Tooltip|RunSpeedModifier)\\b"
     },
     {
       "name": "keyword.item.stats.pz",
@@ -136,6 +136,10 @@
     {
       "name": "keyword.item.equipment.pz",
       "match": "\\b(RequiresEquippedBothHands|TwoHandWeapon|CanBeEquipped|EquippedNoSprint|ProtectFromRainWhenEquipped|UseWhileEquipped|BloodLocation|ReplaceInPrimaryHand|ReplaceInSecondHand)\\b"
+    },
+    {
+      "name": "keyword.item.clothing.pz",
+      "match": "\\b(Capacity|CloseSound|OpenSound|WeightReduction|SoundParameter|AttachmentsProvided|CanHaveHoles|FabricType|ItemWhenDry|Wet|WetCooldown)\\b"
     },
     {
       "name": "keyword.animal.properties.pz",

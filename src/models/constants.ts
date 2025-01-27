@@ -448,7 +448,19 @@ export const VALID_KEYWORDS = {
     "ChanceToSpawnDamaged",
     "MaxCapacity",
     "EngineLoudness",
-    "ConditionLowerOffroad"
+    "ConditionLowerOffroad",
+    // Vêtements
+    "Capacity",
+    "CloseSound",
+    "OpenSound",
+    "WeightReduction",
+    "SoundParameter",
+    "AttachmentsProvided",
+    "CanHaveHoles",
+    "FabricType",
+    "ItemWhenDry",
+    "Wet",
+    "WetCooldown",
   ],
   component: [
     "ContainerName",
