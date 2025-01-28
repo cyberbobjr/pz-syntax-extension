@@ -1,8 +1,10 @@
 import * as vscode from "vscode";
 import { Position, TextDocument } from "vscode";
-import { PROPERTY_DESCRIPTIONS } from "../models/constants";
+import { PROPERTY_DESCRIPTIONS, CRAFT_RECIPE_DESCRIPTIONS } from "../models/constants";
 import { provideDefinition } from "./definition";
 import path from "path";
+import {getBlockType} from '../utils/contextHelper';
+import { itemBlockRegex } from "../models/regexPatterns";
 
 export class PZHoverProvider implements vscode.HoverProvider {
   async provideHover(
@@ -16,10 +18,10 @@ export class PZHoverProvider implements vscode.HoverProvider {
     const word = document.getText(range);
 
     // 1. Hover pour les propriétés (PROPERTY_DESCRIPTIONS)
-    if (this.isPropertyDescription(word)) {
+    if (this.isPropertyDescription(word, document, position)) {
       const contents = new vscode.MarkdownString();
       contents.appendMarkdown(`**${word}**  \n`);
-      contents.appendMarkdown(this.getPropertyDescription(word));
+      contents.appendMarkdown(this.getPropertyDescription(word, document, position));
       return new vscode.Hover(contents);
     }
 
@@ -69,12 +71,32 @@ export class PZHoverProvider implements vscode.HoverProvider {
     return null;
   }
 
-  private isPropertyDescription(word: string): boolean {
-    return !!PROPERTY_DESCRIPTIONS[word];
+  private isPropertyDescription(word: string, document: TextDocument, position: Position): boolean {
+    const blockType = getBlockType(document, position);
+    
+    if (blockType === 'item') {
+        return !!PROPERTY_DESCRIPTIONS[word];
+    }
+    
+    if (blockType === 'craftRecipe') {
+        return !!CRAFT_RECIPE_DESCRIPTIONS[word];
+    }
+    
+    return false;
   }
 
-  private getPropertyDescription(word: string): string {
-    return PROPERTY_DESCRIPTIONS[word] || "";
+  private getPropertyDescription(word: string, document: TextDocument, position: Position): string {
+    const blockType = getBlockType(document, position);
+    
+    if (blockType === 'item') {
+        return PROPERTY_DESCRIPTIONS[word] || "";
+    }
+    
+    if (blockType === 'craftRecipe') {
+        return CRAFT_RECIPE_DESCRIPTIONS[word] || "";
+    }
+    
+    return "";
   }
 
   private extractItemContent(
@@ -84,43 +106,41 @@ export class PZHoverProvider implements vscode.HoverProvider {
     const text = doc.getText();
     const startOffset = doc.offsetAt(startPosition);
 
-    // Trouver le début du bloc item
-    const itemStart = text.lastIndexOf("item", startOffset);
-    if (itemStart === -1) return null;
+    // Reset lastIndex pour s'assurer que la recherche commence du début
+    itemBlockRegex.lastIndex = 0;
+    
+    let bestMatch: { text: string, distance: number } | null = null;
+    let match;
 
-    // Trouver l'accolade ouvrante
-    const braceStart = text.indexOf("{", itemStart);
-    if (braceStart === -1) return null;
+    // Chercher tous les blocs items
+    while ((match = itemBlockRegex.exec(text)) !== null) {
+      const matchStart = match.index;
+      const matchEnd = matchStart + match[0].length;
+      
+      // Calculer la distance entre la position du curseur et le début du bloc
+      const distance = Math.abs(startOffset - matchStart);
 
-    // Parcourir pour trouver l'accolade fermante
-    let braceCount = 1;
-    let currentPos = braceStart + 1;
-    const MAX_LENGTH = 1000; // Limite de taille
-
-    while (
-      currentPos < text.length &&
-      braceCount > 0 &&
-      currentPos - itemStart < MAX_LENGTH
-    ) {
-      const char = text[currentPos];
-      if (char === "{") braceCount++;
-      if (char === "}") braceCount--;
-      currentPos++;
+      // Si c'est le premier match ou si c'est plus proche que le précédent
+      if (!bestMatch || distance < bestMatch.distance) {
+        bestMatch = {
+          text: match[0],
+          distance: distance
+        };
+      }
     }
 
-    if (braceCount !== 0) return null; // Bloc mal formé
-
-    // Extraire et formater
-    let content = text
-      .slice(itemStart, currentPos)
-      .replace(/\r?\n/g, "\n")
-      .trim();
-
-    // Tronquer si nécessaire
-    if (content.length > MAX_LENGTH) {
-      content = content.slice(0, MAX_LENGTH) + "\n// ... (contenu tronqué)";
+    if (bestMatch) {
+      let content = bestMatch.text.trim();
+      const MAX_LENGTH = 10000;
+      
+      // Tronquer si nécessaire
+      if (content.length > MAX_LENGTH) {
+        content = content.slice(0, MAX_LENGTH) + "\n// ... (trunced content)";
+      }
+      
+      return content;
     }
 
-    return content;
+    return null;
   }
 }

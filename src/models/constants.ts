@@ -25,6 +25,7 @@ export const VALID_KEYWORDS = {
     "-fluid",
   ],
   item: [
+    // Core
     "DisplayName",
     "DisplayCategory",
     "Type",
@@ -33,6 +34,9 @@ export const VALID_KEYWORDS = {
     "WorldStaticModel",
     "StaticModel",
     "Tags",
+    "AcceptItemFunction",
+
+    // Autre (à classer)
     "MetalValue",
     "ConditionMax",
     "ConditionLowerChanceOneIn",
@@ -152,7 +156,6 @@ export const VALID_KEYWORDS = {
     "WorldStaticModelsByIndex",
     "IconsForTexture",
     "AttachmentReplacement",
-    "ClothingItem",
     "primaryAnimMask",
     "secondaryAnimMask",
     "ScaleWorldIcon",
@@ -407,7 +410,7 @@ export const VALID_KEYWORDS = {
     "RequiresEquippedBothHands",
     "MetalValue",
     "ConditionLowerChanceOneIn",
-
+    "critDmgMultiplier",
     // Tags et catégories
     "IsFireFuel",
     "IsFireTinder",
@@ -461,17 +464,31 @@ export const VALID_KEYWORDS = {
     "ItemWhenDry",
     "Wet",
     "WetCooldown",
+    "BodyLocation",
+    "ClothingItem",
+    "ClothingItemExtra",
+    "ClothingItemExtraOption",
+    "ClothingExtraSubmenu",
+    "CombatSpeedModifier",
+    "Insulation",
+    "WindResistance",
+    "ScratchDefense",
+    "BiteDefense",
+    // Construction
+    "DigType",
+    // Conteneurs
+    "MaxItemSize",
+    // Son
+    "PutInSound"
   ],
   component: [
     "ContainerName",
     "RainFactor",
     "capacity",
-    "Fluids",
     "fluid",
     "-fluid",
     "CustomDrinkSound",
-    "Fluids",
-    "PickRandomFluid",
+    "PickRandomFluid"
   ],
   itemMapper: ["default"],
   inputs: ["item", "mode:", "flags[", "mappers[", "fluid", "-fluid"],
@@ -489,6 +506,9 @@ export const VALID_KEYWORDS = {
     "NotEmpty",
     "AllowDestroyedItem",
   ],
+  Fluids : [
+    "fluid",
+  ]
 };
 
 export const PROPERTY_DESCRIPTIONS: { [key: string]: string } = {
@@ -568,7 +588,7 @@ export const CRAFT_RECIPE_DESCRIPTIONS: { [key: string]: string } = {
   Result: 'Output item\n*Example*: `Result = "Base.WoodenPlank",`',
   ResultCount: "Number of items produced\n*Example*: `ResultCount = 4,`",
   SkillRequired:
-    'Required skill level\n*Example*: `SkillRequired = "Woodwork=2",`',
+    'Required skill level\n*Example*: `SkillRequired = "Woodwork:2",`',
   KeepOnUse: "Tool is not consumed\n*Values*: `true/false`",
   NeedToBeLearned:
     "Requires recipe knowledge\n*Example*: `NeedToBeLearned = true,`",

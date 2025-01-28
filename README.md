@@ -30,6 +30,7 @@ The supported version of Project Zomboid is b42.
 - v0.2.0 - Initial release
 - v0.2.1 - Add missing properties for vehicle
 - v0.2.2 - Add missing properties for clothing
+- v0.2.3 - Add missing properties for items, refactor all the code for detecting bloc, add a syntax checker for missing comma
 
 ## GitHub Repository
 
