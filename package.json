@@ -2,7 +2,7 @@
   "name": "pz-syntax-extension",
   "displayName": "Project Zomboid Script Support",
   "description": "A Visual Studio Code extension for Project Zomboid file format (items and recipes) syntax highlighting and formatting.",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "publisher": "cyberbobjr",
   "engines": {
     "vscode": "^1.75.0"
