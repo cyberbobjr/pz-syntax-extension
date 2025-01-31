@@ -368,7 +368,7 @@ export const VALID_KEYWORDS = {
     "FillFromLakeSound",
     "FillFromTapSound",
     "FillFromToiletSound",
-
+    "DamagedSound",
     // Propriétés des conteneurs
     "ContainerName",
     "capacity",
@@ -445,6 +445,11 @@ export const VALID_KEYWORDS = {
     "WindResistance",
     "ScratchDefense",
     "BiteDefense",
+    "DiscomfortModifier",
+    "ChanceToFall",
+    "WaterResistance",
+    "VisionModifier",
+    "HearingModifier",
     // Construction
     "DigType",
     // Conteneurs
@@ -601,3 +606,10 @@ export const CRAFT_RECIPE_DESCRIPTIONS: { [key: string]: string } = {
   Category: "Crafting category\n*Values*: `Cooking, Carpentry, Electrical`",
   Animations: "Animation ID for crafting action",
 };
+
+
+export const FLAG_DESCRIPTIONS : { [key: string]: string } = {
+  MayDegradeLight : "There's a small chance of damaging the item used",
+  Prop1: "Will be in the primary hand",
+  Prop2: "Will be in the secondary hand",
+}
