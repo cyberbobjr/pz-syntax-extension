@@ -32,6 +32,9 @@ The supported version of Project Zomboid is b42.
 - v0.2.2 - Add missing properties for clothing
 - v0.2.3 - Add missing properties for items, refactor all the code for detecting bloc, add a syntax checker for missing comma
 - v0.2.4 - Add missing properties for litterature & cooking
+- v0.2.4 - Add missing properties for clothing & fix hilighting of craftRecipe name
+- v0.2.5 - Better file extension support, now .txt files are recognized ad PZ file only if 'module XXXX {' is at beginning of the file
+
 
 ## GitHub Repository
 

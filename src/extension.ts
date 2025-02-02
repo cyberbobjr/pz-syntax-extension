@@ -12,17 +12,31 @@ export const defaultDir = path.normalize(
 );
 
 export function activate(context: vscode.ExtensionContext) {
+  vscode.workspace.onDidOpenTextDocument((document) => {
+    if (document.languageId === "plaintext") {
+      const firstLine = document.lineAt(0).text;
+      const pattern = /^\s*module\s+\w+\s*\{?/;
+
+      if (pattern.test(firstLine)) {
+        console.debug(
+          `Fichier ${document.fileName} détecté comme un fichier de script PZ.`
+        );
+        vscode.languages.setTextDocumentLanguage(document, "pz-scripting");
+      }
+    }
+  });
+
   console.log('Extension "pz-syntax-extension" is now active!');
   const diagnosticProvider = new DiagnosticProvider();
   const watcher = vscode.workspace.createFileSystemWatcher("**/*.txt");
   watcher.onDidChange((uri) => {
     itemCache.clearForFile(uri.fsPath);
-    console.log(`Cache invalidé pour : ${uri.fsPath}`);
+    console.debug(`Cache invalidé pour : ${uri.fsPath}`);
   });
 
   watcher.onDidDelete((uri) => {
     itemCache.clearForFile(uri.fsPath);
-    console.log(`Cache invalidé pour : ${uri.fsPath}`);
+    console.debug(`Cache invalidé pour : ${uri.fsPath}`);
   });
   if (vscode.window.activeTextEditor) {
     diagnosticProvider.updateDiagnostics(
@@ -63,5 +77,5 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
-  console.log('Extension "pz-syntax-extension" is now deactivated.');
+  console.debug('Extension "pz-syntax-extension" is now deactivated.');
 }
