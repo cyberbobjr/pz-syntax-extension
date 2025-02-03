@@ -2,7 +2,7 @@
   "name": "pz-syntax-extension",
   "displayName": "Project Zomboid Script Support",
   "description": "A Visual Studio Code extension for Project Zomboid file format (items and recipes) syntax highlighting and formatting.",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "publisher": "cyberbobjr",
   "engines": {
     "vscode": "^1.75.0"
@@ -31,6 +31,16 @@
             "C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid/media/scripts/"
           ],
           "description": "Directories to search for item definition files."
+        },
+        "pzSyntaxExtension.pzFilenames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "console.txt"
+          ],
+          "description": "list of filenames to consider as pz-script files (regex can be possible)"
         }
       }
     },

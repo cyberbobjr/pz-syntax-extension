@@ -14,12 +14,36 @@ export const defaultDir = path.normalize(
 export function activate(context: vscode.ExtensionContext) {
   vscode.workspace.onDidOpenTextDocument((document) => {
     if (document.languageId === "plaintext") {
+      const config = vscode.workspace.getConfiguration("pzSyntaxExtension");
+      const pzFilenames = config.get<string[]>("pzFilenames", []);
+
+      // Vérification du nom de fichier avec regex
+      const fileName = path.basename(document.fileName);
+      const matchesPattern = pzFilenames.some(pattern => {
+        try {
+          const regex = new RegExp(pattern);
+          return regex.test(fileName);
+        } catch (e) {
+          // Si le pattern n'est pas une regex valide, faire une comparaison exacte
+          return pattern === fileName;
+        }
+      });
+
+      if (matchesPattern) {
+        console.debug(
+          `Fichier ${document.fileName} détecté comme un fichier de script PZ (par pattern).`
+        );
+        vscode.languages.setTextDocumentLanguage(document, "pz-scripting");
+        return;
+      }
+
+      // Vérification de la première ligne (existante)
       const firstLine = document.lineAt(0).text;
       const pattern = /^\s*module\s+\w+\s*\{?/;
 
       if (pattern.test(firstLine)) {
         console.debug(
-          `Fichier ${document.fileName} détecté comme un fichier de script PZ.`
+          `Fichier ${document.fileName} détecté comme un fichier de script PZ (par module).`
         );
         vscode.languages.setTextDocumentLanguage(document, "pz-scripting");
       }
