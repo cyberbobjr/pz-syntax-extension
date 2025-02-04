@@ -27,6 +27,7 @@ The supported version of Project Zomboid is b42.
   - Provides warnings for potential issues in the script
 
 ## Changelog
+- v0.2.8 - Fix bug when formatting fixing script
 - v0.2.7 - Add a new setting 'pzFilenames' which you can specify filename that must be treated like a 'pz-scripting' file, regex allowed
 - v0.2.5 - Better file extension support, now .txt files are recognized ad PZ file only if 'module XXXX {' is at beginning of the file
 - v0.2.4 - Add missing properties for clothing & cooking & fix hilighting of craftRecipe name
