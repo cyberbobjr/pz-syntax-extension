@@ -382,6 +382,7 @@ export const VALID_KEYWORDS = {
     "MetalValue",
     "ConditionLowerChanceOneIn",
     "critDmgMultiplier",
+    "CloseKillMove",
     // Tags et catégories
     "IsFireFuel",
     "IsFireTinder",
@@ -423,6 +424,10 @@ export const VALID_KEYWORDS = {
     "MaxCapacity",
     "EngineLoudness",
     "ConditionLowerOffroad",
+    "ConditionAffectsCapacity",
+    "WheelFriction",
+    "SuspensionDamping",
+    "SuspensionCompression",
     // Vêtements
     "Capacity",
     "CloseSound",
