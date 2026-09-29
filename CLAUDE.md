@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-VS Code extension "Project Zomboid Script Support (Build 42)", Marketplace id `cyberbobjr-pz-modding.pz-syntax-extension`: language support for Project Zomboid script files (`media/scripts/*.txt`), currently for **Build 42.21**.
+VS Code extension "Project Zomboid Script Support (Build 42)", Marketplace id `cyberbobjr-pz-modding.zomboid-script-support`: language support for Project Zomboid script files (`media/scripts/*.txt`), currently for **Build 42.21**.
 
-Versions up to 0.2.9 were published as `cyberbobjr.pz-syntax-extension`. The author no longer has access to that publisher, so do not publish there. Keep the display name different from "Project Zomboid Script Support": the Marketplace rejects duplicate display names.
+Versions up to 0.2.9 were published as `cyberbobjr.pz-syntax-extension`. The author no longer has access to that publisher, so do not publish there. The Marketplace requires both the `name` and the display name to be unique across all publishers, which is why they differ from the former `pz-syntax-extension` / "Project Zomboid Script Support". The GitHub repository keeps its `pz-syntax-extension` name.
 
 ## Commands
 
