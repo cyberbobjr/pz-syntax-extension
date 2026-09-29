@@ -4,6 +4,8 @@
 
 Rewrite of the extension on top of a parser that follows the game's own script parser, and of a schema generated from Build 42.21.
 
+The extension moves to the `cyberbobjr-pz-modding` publisher as **Project Zomboid Script Support (Build 42)**. Versions up to 0.2.9 were published as `cyberbobjr.pz-syntax-extension`: uninstall that one, as both would handle the same files.
+
 - **All script blocks** are supported: entities and their components, fluids, energies, timed actions, models, sounds, vehicles and templates, xui skins, character traits and professions, ragdolls, physics shapes… The previous version only knew `item`, `craftRecipe` and `fixing`.
 - **Validation against the game**:
   - unknown properties with "did you mean" suggestions;

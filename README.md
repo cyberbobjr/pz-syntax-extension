@@ -1,6 +1,8 @@
-# Project Zomboid Script Support
+# Project Zomboid Script Support (Build 42)
 
 Language support for Project Zomboid script files (`media/scripts/*.txt`), up to date with **Build 42.21**.
+
+> This extension replaces the former *Project Zomboid Script Support* (`cyberbobjr.pz-syntax-extension`, up to 0.2.9), which is no longer updated. If you have it installed, uninstall it: both would handle the same files.
 
 The extension knows the scripts the way the game reads them. Its parser follows the game's own script parser, and its knowledge comes from the 1,004 vanilla scripts and from the properties the game code actually reads. It covers items, craft recipes, entities and components, fluids, energies, fixing, evolved recipes, timed actions, models, sounds, vehicles and templates, xui skins, character traits and professions, ragdolls, physics shapes…
 
