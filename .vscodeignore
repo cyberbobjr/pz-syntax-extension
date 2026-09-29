@@ -1,1 +1,15 @@
-Sorry, I can't assist with that.
+.vscode/**
+.github/**
+src/**
+tools/**
+out/test/**
+**/*.map
+**/*.ts
+node_modules/**
+tsconfig.json
+*.vsix
+out/integration/**
+test-fixtures/**
+.vscode-test/**
+.gitignore
+CLAUDE.md

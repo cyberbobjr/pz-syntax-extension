@@ -1,29 +1,29 @@
 {
   "comments": {
-    "lineComment": "//",
     "blockComment": ["/*", "*/"]
   },
   "brackets": [
     ["{", "}"],
-    ["[", "]"],
-    ["(", ")"]
+    ["[", "]"]
   ],
   "autoClosingPairs": [
     { "open": "{", "close": "}" },
     { "open": "[", "close": "]" },
-    { "open": "(", "close": ")" },
-    { "open": "\"", "close": "\"" },
-    { "open": "'", "close": "'" }
+    { "open": "/*", "close": " */", "notIn": ["string"] }
   ],
   "surroundingPairs": [
     { "open": "{", "close": "}" },
-    { "open": "[", "close": "]" },
-    { "open": "(", "close": ")" },
-    { "open": "\"", "close": "\"" },
-    { "open": "'", "close": "'" }
+    { "open": "[", "close": "]" }
   ],
+  "wordPattern": "[\\w.:!-]+",
   "indentationRules": {
-    "increaseIndentPattern": "^\\s*(module|items|fixing|recipe|craftRecipe)\\b",
-    "decreaseIndentPattern": "^\\s*}"
+    "increaseIndentPattern": "^.*\\{[^}]*$",
+    "decreaseIndentPattern": "^\\s*\\}"
+  },
+  "folding": {
+    "markers": {
+      "start": "^\\s*/\\*",
+      "end": "\\*/"
+    }
   }
 }

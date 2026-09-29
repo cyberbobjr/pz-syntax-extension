@@ -1,68 +1,86 @@
-# Project Zomboid VSCode Syntax Extension
+# Project Zomboid Script Support
 
-This VS Code extension provides comprehensive support for Project Zomboid's scripting files, including syntax highlighting, auto-formatting, and diagnostics for items, recipes, and other script blocks.
+Language support for Project Zomboid script files (`media/scripts/*.txt`), up to date with **Build 42.21**.
 
-The supported version of Project Zomboid is b42.
+The extension knows the scripts the way the game reads them. Its parser follows the game's own script parser, and its knowledge comes from the 1,004 vanilla scripts and from the properties the game code actually reads. It covers items, craft recipes, entities and components, fluids, energies, fixing, evolved recipes, timed actions, models, sounds, vehicles and templates, xui skins, character traits and professions, ragdolls, physics shapes…
 
 ## Features
 
-- Syntax highlighting for Project Zomboid's scripting language:
-  - `module` declarations
-  - `items` blocks
-  - `fixing` blocks
-  - `recipe` blocks
-  - `craftRecipe` blocks
-  - Various item properties and keywords
-- Navigation features:
-  - Go to item definition with CTRL+click
-  - Hover information for items (shows definition when hovering over Base.ITEM)
-- Automatic indentation rules
-- Block comment support (`/* */`)
-- Line comment support (`//`)
-- Auto-formatting support:
-  - Aligns assignments within blocks
-  - Maintains proper indentation levels
-- Diagnostics:
-  - Identifies unrecognized keywords within blocks
-  - Provides warnings for potential issues in the script
+### Validation
 
-## Changelog
-- v0.2.9 - Add new properties for item
-- v0.2.8 - Fix bug when formatting fixing script
-- v0.2.7 - Add a new setting 'pzFilenames' which you can specify filename that must be treated like a 'pz-scripting' file, regex allowed
-- v0.2.5 - Better file extension support, now .txt files are recognized ad PZ file only if 'module XXXX {' is at beginning of the file
-- v0.2.4 - Add missing properties for clothing & cooking & fix hilighting of craftRecipe name
-- v0.2.3 - Add missing properties for items, refactor all the code for detecting bloc, add a syntax checker for missing comma
-- v0.2.2 - Add missing properties for clothing
-- v0.2.1 - Add missing properties for vehicle
-- v0.2.0 - Initial release
+Errors and warnings as you type, each with a **quick fix** when one exists:
+- **Missing commas**: the game silently merges the two lines.
+- **`//` comments**: the game has no line comments and reads that text as script. The quick fix converts them to `/* */`.
+- **Unbalanced braces**, unterminated comments, text outside any block.
+- **Unknown properties**, for example `Wieght`, which the game silently ignores. You get a "did you mean `Weight`?" suggestion. Property names are case-insensitive, like in the game.
+- **Build 41 leftovers**:
+  - `Type = Weapon` is converted to `ItemType = base:weapon`;
+  - tags without a namespace (`Hammer`) are converted to `base:hammer`.
+- **Invalid values**: booleans, numbers, and values outside the game registries (item types, tags, body locations, display categories, weapon categories, recipe categories and tags).
+- **Recipe lines**: resource (`item`, `fluid`, `energy`), amount, `mode:`, and input/output `flags[...]`.
+- Unknown block types, unknown components and duplicate properties.
 
-## GitHub Repository
+The vanilla scripts produce no diagnostics.
 
-You can find the source code and contribute to this project on GitHub:
-[pz-syntax-extension](https://github.com/cyberbobjr/pz-syntax-extension)
+### Completion
 
-## Configuration
-By default the Project Zomboid directory is "C:\Program Files (x86)\Steam\steamapps\common\ProjectZomboid\media\scripts", but you can change this in the settings of the extension.
-You can add custom filename if you want they be detected as "pz-scripting" file
+- Script blocks at module level, sub-blocks and components.
+- Properties of the current block, with the most useful ones first. In an item, the properties typical of its `ItemType` (food, weapon, clothing…) come first.
+- Values: registry values (`base:weapon`, `base:hammer`…), booleans, common vanilla values.
+- Recipe lines: `item`/`-fluid`/`energy` line templates, item ids in `[...]`, `tags[...]`, `flags[...]`, `mode:`, `mappers[...]`.
+- `Module.Item` ids of vanilla and of your workspace.
 
-## Known issues
-Sometime items/craftRecipe files are not detected as pz-scripting, in this case close them all.
+### Hover and navigation
 
-## Installation if you want to evolve or fix the extension
+- Documentation of properties: description, value type, how often vanilla uses them, and their most common values.
+- Hovering a reference shows its definition: `Base.Plank`, `timedAction = Making`, `-fluid 1.0 [Water]`, `entityStyle = ES_…`.
+- **Go to definition** (F12 / Ctrl+click) across vanilla and your mod.
+- **Outline** of the document: modules, objects and sub-blocks.
 
-1. Clone the repository or download the source code.
-2. Open the project in Visual Studio Code.
-3. Press `F5` to run the extension in a new Extension Development Host window.
+### Formatting
 
-## Usage
+Re-indents blocks and aligns the `=` of consecutive properties. Only whitespace changes: statements, values and comments are kept as written.
 
-- Open a file with the `.txt` extension to activate the syntax highlighting, formatting, and diagnostic features.
-- Use the command palette to access any additional commands provided by the extension.
+### Highlighting
+
+Block headers, properties, numbers, booleans, `Module.Item` references, namespaced ids (`base:hammer`), recipe line keywords. `//` lines are shown as errors.
+
+## Settings
+
+| Setting | Default | Description |
+|---|---|---|
+| `pzSyntaxExtension.searchDirectories` | `[]` | Script folders to index (vanilla, other mods). Empty: the game's `media/scripts`, found automatically through Steam, including libraries on other drives. |
+| `pzSyntaxExtension.pzFilenames` | `["console.txt"]` | File names (regular expressions allowed) to treat as scripts. |
+| `pzSyntaxExtension.diagnostics.unknownProperties` | `warning` | `error`, `warning`, `information` or `off`. |
+| `pzSyntaxExtension.diagnostics.unknownValues` | `information` | Values missing from the game registries. Mods can register new ones, hence the low default level. |
+| `pzSyntaxExtension.format.alignValues` | `true` | Align `=` when formatting. |
+
+Files under a `media/scripts` folder are recognized automatically, as are `.txt` files starting with `module X`. The **PZ Script: Re-index scripts** command rebuilds the index.
+
+## Updating to a new game version
+
+The knowledge of the game lives in `data/schema.json`. It is generated from an installed game:
+
+```sh
+npm run generate-schema                     # finds the game through Steam
+npm run generate-schema -- "D:/SteamLibrary/steamapps/common/ProjectZomboid"
+```
+
+The generator reads the vanilla scripts and the string constants of the script classes in `projectzomboid.jar`. It reports the block kinds whose properties it cannot fully verify.
+
+## Development
+
+```sh
+npm install
+npm test                  # unit tests + checks against every vanilla script (when the game is installed)
+npm run test:integration  # end-to-end test in a real VS Code
+```
+
+Press `F5` in VS Code to run the extension in a development host.
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+Issues and pull requests are welcome on [GitHub](https://github.com/cyberbobjr/pz-syntax-extension).
 
 ## Supporting the Project
 
@@ -70,17 +88,6 @@ If you find this extension helpful, please consider supporting its development. 
 
 [Support me](https://ko-fi.com/Z8Z8QJV31)
 
-## Todo
-Autofilling tags & flags for items/craftRecipe
-Autocompleting properties, Base.itemName and so on
-Detection of entities
-Improve documentation for properties
-Detection of custom module from others mods
-
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-## Notes
-
-This is my first extension, please be kind. Special thanks to Copilot for helping me create this extension (and DeepSeek too, a lot).
+MIT

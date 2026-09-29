@@ -1,105 +1,92 @@
-import * as vscode from "vscode";
 import * as path from "path";
-import { DiagnosticProvider } from "./providers/diagnostic";
-import { provideDefinition } from "./providers/definition";
-import { provideDocumentFormattingEdits } from "./providers/editing";
-import { PZCompletionItemProvider } from "./providers/completion";
-import { PZHoverProvider } from "./providers/hover";
-import { itemCache } from "./providers/cache";
+import * as vscode from "vscode";
+import { loadDefaultSchema } from "./schema/schema";
+import { DocumentCache } from "./vscode/documentCache";
+import { IndexService } from "./vscode/indexService";
+import {
+  CompletionProvider,
+  DefinitionProvider,
+  DiagnosticsProvider,
+  FormattingProvider,
+  HoverProvider,
+  LANGUAGE_ID,
+  SymbolProvider,
+} from "./vscode/providers";
 
-export const defaultDir = path.normalize(
-  "C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid/media/scripts/"
-);
+const CONFIG = "pzSyntaxExtension";
+/** Same test as the language's firstLine: plain .txt files starting with `module X` are scripts. */
+const MODULE_FIRST_LINE = /^\s*module\s+\w+\s*\{?/;
 
-export function activate(context: vscode.ExtensionContext) {
-  vscode.workspace.onDidOpenTextDocument((document) => {
-    if (document.languageId === "plaintext") {
-      const config = vscode.workspace.getConfiguration("pzSyntaxExtension");
-      const pzFilenames = config.get<string[]>("pzFilenames", []);
-
-      // Vérification du nom de fichier avec regex
-      const fileName = path.basename(document.fileName);
-      const matchesPattern = pzFilenames.some(pattern => {
-        try {
-          const regex = new RegExp(pattern);
-          return regex.test(fileName);
-        } catch (e) {
-          // Si le pattern n'est pas une regex valide, faire une comparaison exacte
-          return pattern === fileName;
-        }
-      });
-
-      if (matchesPattern) {
-        console.debug(
-          `Fichier ${document.fileName} détecté comme un fichier de script PZ (par pattern).`
-        );
-        vscode.languages.setTextDocumentLanguage(document, "pz-scripting");
-        return;
-      }
-
-      // Vérification de la première ligne (existante)
-      const firstLine = document.lineAt(0).text;
-      const pattern = /^\s*module\s+\w+\s*\{?/;
-
-      if (pattern.test(firstLine)) {
-        console.debug(
-          `Fichier ${document.fileName} détecté comme un fichier de script PZ (par module).`
-        );
-        vscode.languages.setTextDocumentLanguage(document, "pz-scripting");
-      }
+function matchesConfiguredName(fileName: string): boolean {
+  const patterns = vscode.workspace.getConfiguration(CONFIG).get<string[]>("pzFilenames", []);
+  return patterns.some((pattern) => {
+    try {
+      return new RegExp(pattern).test(fileName);
+    } catch {
+      return pattern === fileName;
     }
   });
-
-  console.log('Extension "pz-syntax-extension" is now active!');
-  const diagnosticProvider = new DiagnosticProvider();
-  const watcher = vscode.workspace.createFileSystemWatcher("**/*.txt");
-  watcher.onDidChange((uri) => {
-    itemCache.clearForFile(uri.fsPath);
-    console.debug(`Cache invalidé pour : ${uri.fsPath}`);
-  });
-
-  watcher.onDidDelete((uri) => {
-    itemCache.clearForFile(uri.fsPath);
-    console.debug(`Cache invalidé pour : ${uri.fsPath}`);
-  });
-  if (vscode.window.activeTextEditor) {
-    diagnosticProvider.updateDiagnostics(
-      vscode.window.activeTextEditor.document
-    );
-  }
-
-  context.subscriptions.push(
-    watcher,
-    vscode.workspace.onDidOpenTextDocument((document) => {
-      if (document.languageId === "pz-scripting") {
-        diagnosticProvider.updateDiagnostics(document);
-      }
-    }),
-    vscode.workspace.onDidChangeTextDocument((event) => {
-      if (event.document.languageId === "pz-scripting") {
-        diagnosticProvider.updateDiagnostics(event.document);
-      }
-    }),
-    vscode.languages.registerCompletionItemProvider(
-      "pz-scripting",
-      new PZCompletionItemProvider(),
-      ".",
-      " ",
-      "\t" // Déclencheurs de complétion
-    ),
-    vscode.languages.registerHoverProvider(
-      "pz-scripting",
-      new PZHoverProvider()
-    ),
-    vscode.languages.registerDocumentFormattingEditProvider("pz-scripting", {
-      provideDocumentFormattingEdits,
-    }),
-    vscode.languages.registerDefinitionProvider("pz-scripting", {
-      provideDefinition,
-    })
-  );
 }
 
-export function deactivate() {
-  console.debug('Extension "pz-syntax-extension" is now deactivated.');
+/** Switches plaintext documents to Project Zomboid scripts when their name or first line says so. */
+function detectLanguage(document: vscode.TextDocument): void {
+  if (document.languageId !== "plaintext" || document.lineCount === 0) return;
+  if (matchesConfiguredName(path.basename(document.fileName)) || MODULE_FIRST_LINE.test(document.lineAt(0).text)) {
+    void vscode.languages.setTextDocumentLanguage(document, LANGUAGE_ID);
+  }
+}
+
+export function activate(context: vscode.ExtensionContext): void {
+  const output = vscode.window.createOutputChannel("PZ Script");
+  const schema = loadDefaultSchema();
+  const cache = new DocumentCache();
+  const indexService = new IndexService(output);
+  const diagnostics = new DiagnosticsProvider(cache, schema);
+  output.appendLine(`Project Zomboid script support for build ${schema.gameVersion}`);
+
+  const selector: vscode.DocumentSelector = { language: LANGUAGE_ID };
+  context.subscriptions.push(
+    output,
+    indexService,
+    diagnostics,
+    vscode.languages.registerCompletionItemProvider(selector, new CompletionProvider(cache, schema, indexService), " ", "=", "[", ";", ":", "."),
+    vscode.languages.registerHoverProvider(selector, new HoverProvider(cache, schema, indexService)),
+    vscode.languages.registerDefinitionProvider(selector, new DefinitionProvider(cache, indexService)),
+    vscode.languages.registerDocumentFormattingEditProvider(selector, new FormattingProvider(cache)),
+    vscode.languages.registerDocumentSymbolProvider(selector, new SymbolProvider(cache)),
+    vscode.languages.registerCodeActionsProvider(selector, diagnostics, { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }),
+    vscode.workspace.onDidOpenTextDocument((document) => {
+      detectLanguage(document);
+      diagnostics.update(document);
+    }),
+    vscode.workspace.onDidChangeTextDocument((event) => {
+      if (event.document.languageId !== LANGUAGE_ID) return;
+      diagnostics.schedule(event.document);
+      indexService.scheduleDocument(event.document);
+    }),
+    vscode.workspace.onDidSaveTextDocument((document) => {
+      if (document.languageId === LANGUAGE_ID) indexService.indexDocument(document);
+    }),
+    vscode.workspace.onDidCloseTextDocument((document) => {
+      cache.forget(document);
+      diagnostics.clear(document);
+    }),
+    vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration(`${CONFIG}.searchDirectories`)) void indexService.rebuild();
+      if (event.affectsConfiguration(`${CONFIG}.diagnostics`)) {
+        vscode.workspace.textDocuments.forEach((document) => diagnostics.update(document));
+      }
+    }),
+    vscode.commands.registerCommand("pzSyntaxExtension.reindex", () => indexService.rebuild()),
+  );
+
+  vscode.workspace.textDocuments.forEach((document) => {
+    detectLanguage(document);
+    diagnostics.update(document);
+  });
+  void vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: "PZ: indexing scripts" }, () => indexService.rebuild());
+}
+
+export function deactivate(): void {
+  // Disposables registered in activate() are released by VS Code.
 }
