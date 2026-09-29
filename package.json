@@ -1,49 +1,45 @@
 {
   "name": "pz-syntax-extension",
   "displayName": "Project Zomboid Script Support",
-  "description": "A Visual Studio Code extension for Project Zomboid file format (items and recipes) syntax highlighting and formatting.",
-  "version": "0.2.9",
+  "description": "Project Zomboid Build 42.21 script support: syntax highlighting, validation against the game, completion, hover docs, go to definition, outline and formatting for items, recipes, entities, fluids, vehicles and every other script block.",
+  "version": "0.3.0",
   "publisher": "cyberbobjr",
-  "engines": {
-    "vscode": "^1.75.0"
-  },
-  "main": "./out/extension.js",
-  "activationEvents": [
-    "onLanguage:plaintext"
-  ],
-  "editor.semanticHighlighting.enabled": true,
+  "author": "cyberbobjr",
+  "license": "MIT",
+  "icon": "images/pz-script.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/cyberbobjr/pz-syntax-extension"
   },
-  "icon": "images/pz-script.png",
+  "bugs": {
+    "url": "https://github.com/cyberbobjr/pz-syntax-extension/issues"
+  },
+  "homepage": "https://github.com/cyberbobjr/pz-syntax-extension#readme",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Formatters",
+    "Snippets"
+  ],
+  "keywords": [
+    "project zomboid",
+    "zomboid",
+    "pz",
+    "build 42",
+    "modding",
+    "script",
+    "craftRecipe",
+    "items"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:pz-scripting",
+    "onLanguage:plaintext"
+  ],
   "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "PZ Syntax Extension",
-      "properties": {
-        "pzSyntaxExtension.searchDirectories": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            "C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid/media/scripts/"
-          ],
-          "description": "Directories to search for item definition files."
-        },
-        "pzSyntaxExtension.pzFilenames": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            "console.txt"
-          ],
-          "description": "list of filenames to consider as pz-script files (regex can be possible)"
-        }
-      }
-    },
     "languages": [
       {
         "id": "pz-scripting",
@@ -51,8 +47,15 @@
           "Project Zomboid Script",
           "pz-script"
         ],
+        "filenamePatterns": [
+          "**/media/scripts/**/*.txt"
+        ],
         "firstLine": "^\\s*module\\s+\\w+\\s*\\{?",
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./images/pz-script.png",
+          "dark": "./images/pz-script.png"
+        }
       }
     ],
     "grammars": [
@@ -62,40 +65,83 @@
         "path": "./syntaxes/pz-scripting.tmLanguage.json"
       }
     ],
-    "semanticTokenScopes": [
+    "commands": [
       {
-        "scopes": {
-          "entity.name.recipe.pz": [
-            "entity.name.recipe"
+        "command": "pzSyntaxExtension.reindex",
+        "title": "Re-index scripts",
+        "category": "PZ Script"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Project Zomboid Script",
+      "properties": {
+        "pzSyntaxExtension.searchDirectories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Script folders indexed for go to definition, hovers and id completion (vanilla scripts, other mods). Empty: the `media/scripts` folder of the game, found through Steam. The workspace `media/scripts` files are always indexed."
+        },
+        "pzSyntaxExtension.pzFilenames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "console.txt"
           ],
-          "entity.name.item.pz": [
-            "entity.name.item"
+          "description": "File names (regular expressions allowed) to treat as Project Zomboid scripts."
+        },
+        "pzSyntaxExtension.diagnostics.unknownProperties": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warning",
+            "information",
+            "off"
           ],
-          "entity.name.recipe.name.pz": [
-            "entity.name.recipe.name"
+          "default": "warning",
+          "description": "How to report properties the game does not read."
+        },
+        "pzSyntaxExtension.diagnostics.unknownValues": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warning",
+            "information",
+            "off"
           ],
-          "entity.name.item.name.pz": [
-            "entity.name.item.name"
-          ],
-          "keyword.control.pz": [
-            "keyword.control"
-          ]
+          "default": "information",
+          "description": "How to report values missing from the game registries (tags, body locations, categories…). Mods can register new values."
+        },
+        "pzSyntaxExtension.format.alignValues": {
+          "type": "boolean",
+          "default": true,
+          "description": "Align the = of consecutive properties when formatting."
         }
       }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./tsconfig.json",
-    "watch": "tsc -watch -p ./tsconfig.json",
-    "postinstall": "node ./node_modules/vscode/bin/install",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "npm run compile && node --test out/test/*.test.js",
+    "coverage": "npm run compile && node --test --experimental-test-coverage out/test/*.test.js",
+    "generate-schema": "npm run compile && node tools/generate-schema.js",
     "package": "vsce package",
-    "publish": "vsce publish"
+    "publish": "vsce publish",
+    "test:integration": "npm run compile && node out/integration/runTest.js"
   },
   "devDependencies": {
-    "@types/node": "^22.10.9",
-    "typescript": "^4.0.0",
-    "vsce": "^2.15.0",
-    "vscode": "^1.1.36"
+    "@types/node": "^20.17.0",
+    "@types/vscode": "^1.75.0",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.2.0",
+    "typescript": "^5.6.0",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2"
   }
 }
