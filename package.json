@@ -1,9 +1,9 @@
 {
-  "name": "zomboid-script-support",
-  "displayName": "Project Zomboid Script Support (Build 42)",
+  "name": "pz-syntax-extension",
+  "displayName": "Project Zomboid Script Support",
   "description": "Project Zomboid Build 42.21 script support: syntax highlighting, validation against the game, completion, hover docs, go to definition, outline and formatting for items, recipes, entities, fluids, vehicles and every other script block.",
   "version": "0.3.0",
-  "publisher": "cyberbobjr-pz-modding",
+  "publisher": "cyberbobjr",
   "author": "cyberbobjr",
   "license": "MIT",
   "icon": "images/pz-script.png",
